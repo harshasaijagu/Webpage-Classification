@@ -1,0 +1,13 @@
+numpy
+pandas
+scikit-learn
+xgboost
+gensim
+nltk
+tensorflow
+streamlit
+beautifulsoup4
+requests
+matplotlib
+seaborn
+mlflow

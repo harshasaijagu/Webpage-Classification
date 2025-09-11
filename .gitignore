@@ -1,0 +1,6 @@
+webpage_classify_env/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+models/
