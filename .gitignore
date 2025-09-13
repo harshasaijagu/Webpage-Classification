@@ -1,6 +1,22 @@
+# Python virtual environment
 webpage_classify_env/
+
+# Python cache files
 __pycache__/
 *.pyc
+
+# Jupyter notebook checkpoints
 .ipynb_checkpoints/
+
+# VSCode settings
 .vscode/
+
+# Trained models and transformers
 models/
+artifacts/
+
+# MLflow runs
+mlruns/
+
+# Optional: OS files
+.DS_Store

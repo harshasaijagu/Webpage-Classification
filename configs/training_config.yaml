@@ -1,0 +1,75 @@
+# config.yaml
+# ------------
+# Configuration file for the training pipeline
+# Supports classification or regression problems
+# Includes preprocessing options, feature engineering, model selection, hyperparameter tuning, and save paths.
+
+# -------------------------------
+# General Problem Settings
+# -------------------------------
+problem_type: classification  # "classification" or "regression"
+csv_path: "data/webpages.csv"  # Path to your input CSV file
+text_column: "content"         # Column containing the webpage text
+target_column: "category"      # Column containing labels
+
+# -------------------------------
+# Preprocessing & Feature Engineering
+# -------------------------------
+preprocessing:
+  features:
+    # List all feature engineering steps you want to include
+    # Options: "TF-IDF", "Bag-of-Words", "LDA", "Sentence Embeddings", "Text Stats"
+    - "TF-IDF"
+    - "Text Stats"
+  max_features: 5000          # Max features for TF-IDF / Bag-of-Words / LDA
+  n_topics: 10                # Number of topics if using LDA
+  sentence_embed_model: "all-MiniLM-L6-v2"  # Pretrained Sentence-BERT model
+  reduce_dim: true            # Whether to apply dimensionality reduction (TruncatedSVD)
+  svd_components: 300         # Number of SVD components if reduce_dim=True
+  save_path: "artifacts/transformers/"  # Path to save fitted transformers
+
+# -------------------------------
+# Model Settings
+# -------------------------------
+model:
+  # Supported models:
+  # Classification: Logistic Regression, Random Forest, XGBoost, LightGBM, CatBoost, SVM, Gradient Boosting
+  # Regression: Linear Regression, Random Forest, XGBoost, LightGBM, CatBoost, SVR, Gradient Boosting
+  type: "Random Forest"       # Choose the model type
+  params:
+    # Model hyperparameters (use dictionary format)
+    n_estimators: 200
+    max_depth: 10
+    random_state: 42
+  save_path: "artifacts/model.joblib"  # Path to save the trained model
+
+  # -------------------------------
+  # Optional Hyperparameter Tuning
+  # -------------------------------
+  tuning:
+    enable: false               # Set true to perform hyperparameter tuning
+    method: "grid"             # "grid" for GridSearchCV, "random" for RandomizedSearchCV
+    cv: 3                      # Number of cross-validation folds
+    scoring: "accuracy"        # Scoring metric, e.g., "accuracy", "f1_weighted", "r2", etc.
+    param_grid:                # Dictionary of parameters for tuning
+      n_estimators: [100, 200, 300]
+      max_depth: [5, 10, 15]
+      min_samples_split: [2, 5, 10]
+      min_samples_leaf: [1, 2, 4]
+    n_iter: 10                 # Only used if method="random"; number of random iterations
+
+# -------------------------------
+# Notes:
+# -------------------------------
+# 1. features list can include any combination of feature engineering steps.
+# 2. Model hyperparameters and tuning param_grid should match the selected model.
+# 3. If tuning.enable is false, the model_params will be used directly.
+# 4. problem_type decides which evaluation metrics are used and which models are allowed.
+# 5. save_path is where the trained model will be persisted and later loaded for prediction.
+
+# -----------------
+# Experiment Tracking (MLflow)
+# -----------------
+mlflow:
+  experiment_name: "webpage_classification"
+  tracking_uri: "http://127.0.0.1:5000"   # Change if MLflow server is remote
